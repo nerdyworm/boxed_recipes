@@ -18,8 +18,13 @@ dna = {
   ],
 
   :packages => [
-    "imagemagic",
+    "imagemagick",
     "libmagickwand-dev"
+  ],
+
+  :gems => [
+    "bundler",
+    "passenger"
   ],
 
   :applications => [
@@ -27,11 +32,15 @@ dna = {
   ],
 
   :recipes => [
+    "build-essential",
     "packages",
-    "users",
+    #"users",
     "sudo",
     "git",
     "logrotate",
+    "mongodb::source",
+    "mongodb::backup",
+    "gems"
   ]
 }
 

@@ -2,7 +2,7 @@
 # Boxed Apps Solo Config
 
 
-cookbook_path     File.join(File.dirname(__FILE__), '..', "cookbooks")
+cookbook_path    "/etc/chef/cookbooks"
 log_level         :info
 file_store_path  File.join(File.dirname(__FILE__), '..')
 file_cache_path  File.join(File.dirname(__FILE__), '..')
