@@ -40,17 +40,17 @@ dna = {
   ],
 
   :recipes => [
-    "packages",
+    #"packages",
     #"users",
     #"sudo",
-    "git",
-    "logrotate",
-    "mongodb::source",
-    "mongodb::backup",
-    "nginx::default",
-    "gems",
-    "unicorn",
-    "applications"
+    #"git",
+    #"logrotate",
+    #"mongodb::source",
+    #"mongodb::backup",
+    #"nginx::default",
+    #"gems",
+    #"unicorn",
+    #"applications"
   ]
 }
 
