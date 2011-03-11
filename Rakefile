@@ -26,7 +26,7 @@ task :upload => [:test, :create_dna]  do
   end
   
   puts "* Upload your cookbooks *"  
-  sh "rsync -rlP --delete --exclude '.*' --rsync-path 'sudo rsync' #{File.dirname(__FILE__)}/ #{ENV['server']}:#{REMOTE_CHEF_PATH}"
+  sh "rsync -qrlP --delete --exclude '.*' --rsync-path 'sudo rsync' #{File.dirname(__FILE__)}/ #{ENV['server']}:#{REMOTE_CHEF_PATH}"
   File.delete(File.dirname(__FILE__) + "/config/dna.json")
 end
 
@@ -66,4 +66,10 @@ def create_cookbook(dir)
 EOH
     end
   end
+end
+
+
+# tasks in tasks/
+Dir[ File.join(File.dirname(__FILE__), 'tasks', '*.rake') ].sort.each do |f|
+  load f
 end

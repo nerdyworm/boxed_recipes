@@ -1,0 +1,7 @@
+#!/bin/sh
+exec 2>&1
+
+trap 'kill -HUP %1' 1 2 13 15
+
+# <%= node[:rvm_bin] %>/god -D -c /etc/god/master.god --no-syslog & wait
+<%= node[:rvm_bin] %>/god -D -c /etc/god/master.god & wait

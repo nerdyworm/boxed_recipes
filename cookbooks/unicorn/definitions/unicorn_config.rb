@@ -20,7 +20,6 @@
 
 define :unicorn_config, :listen => nil, :working_directory => nil, :worker_timeout => 60, :preload_app => false, :worker_processes => 4, :before_fork => nil, :after_fork => nil, :pid => nil, :stderr_path => nil, :stdout_path => nil, :notifies => nil, :owner => nil, :group => nil, :mode => nil do
 
-  puts "params: #{params}"
   config_dir = File.dirname(params[:name])
 
   directory config_dir do
