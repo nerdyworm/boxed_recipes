@@ -7,10 +7,6 @@
 # Short-Description: Unicorn Rack application server
 # Description:       Enable <%= @name %> at boot time.
 #
-#
-
-# change to user that runs this show
-# su <%= node[:app_user] %>
 
 # just to make sure we have the proper value
 export HOME=/home/<%= node[:app_user] %>
@@ -18,7 +14,7 @@ export HOME=/home/<%= node[:app_user] %>
 # check for a pids file that will casue unicorn to fail
 # it's start up process, remove it if it is not a directory
 PIDS=/data/apps/<%= @name %>/current/tmp/pids
-if [ ! -d "$PIDS" ]; then
+if [[ -e "$PIDS" && ! -d "$PIDS" ]]; then
   rm "$PIDS"
 fi
 
@@ -26,7 +22,8 @@ PID=<%= @pid %>
 
 old_pid="$PID.oldbin"
 
-CMD="su <%= node[:app_user] %> -c '<%= @cmd %>'"
+
+CMD='<%= @cmd %>'
 
 sig () {
 	test -s "$PID" && kill -$1 `cat $PID`

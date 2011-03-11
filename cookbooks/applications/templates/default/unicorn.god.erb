@@ -18,8 +18,8 @@ God.watch do |w|
   w.restart_grace = 10.seconds
   w.pid_file = "<%= @vars[:pid] %>"
 
-  w.uid = '<%= @vars[:uid] %>'
-  w.gid = '<%= @vars[:gid] %>'
+  # w.uid = '<%= @vars[:uid] %>'
+  # w.gid = '<%= @vars[:gid] %>'
 
   w.behavior(:clean_pid_file)
   

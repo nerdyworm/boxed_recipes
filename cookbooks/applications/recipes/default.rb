@@ -158,7 +158,7 @@ end
 
 template "/etc/init.d/god" do
   owner node[:root]
-  mode 0744
+  mode 0755
   source "god.init.erb"
 end
 
@@ -176,9 +176,10 @@ end
 
 # remove default site...
 bash "disabling nginx default" do
+  only_if "[ -f /etc/nginx/sites-enabled/default ]"
   user "root" 
   code "/usr/sbin/nxdissite default"
-  only_if "[ -f /etc/nginx/sites-enabled/default ]"
+  notifies :restart, resources(:service => "nginx")
 end
 
 #need to restart nginx x
