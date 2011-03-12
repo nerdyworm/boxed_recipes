@@ -5,6 +5,8 @@
 # This script enables you to get a working ruby on rails 
 # enviroment with mongodb, rvm, and rmagick.
 
+# should try ami-fae20893 (Ubuntu 10.04, 64bit, Chef 0.9.8) 
+
 sudo apt-get update
 sudo apt-get -y install build-essential zlib1g-dev libxml2-dev libxslt-dev \
 libssl-dev libcurl4-openssl-dev git-core libreadline5-dev

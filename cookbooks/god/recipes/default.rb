@@ -1,28 +1,14 @@
-#
-# Cookbook Name:: god
-# Recipe:: default
-#
-# Copyright 2009, Opscode, Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+include_recipe "rvm"
 
-# Using RVM
-# include_recipe "ruby"
-include_recipe "runit"
+# install god gem
+rvm_gem "god" do
+  ruby_string "ruby-1.9.2-p180"
+end
 
-gem_package "god" do
-  action :install
+# make a rvm wrapper for init script
+rvm_wrapper "bootup" do
+  ruby_string "ruby-1.9.2-p180"
+  binary "god"
 end
 
 directory "/etc/god/conf.d" do
@@ -39,4 +25,13 @@ template "/etc/god/master.god" do
   mode 0755
 end
 
-# runit_service "god"
+template "/etc/init.d/god" do
+  owner node[:root]
+  mode 0755
+  source "god.init.erb"
+end
+
+service "god" do
+  supports :start => true, :stop => true, :restart => true
+  action [ :enable, :start ]
+end

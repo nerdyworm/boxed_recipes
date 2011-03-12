@@ -43,17 +43,29 @@ Unicorn
   - rvm_wrapper
 
 
+Global Setup
+  - directories
+    - /data/
+    - /data/logs
+  
+
+
 Rails Application
-  - create directories
+  - create
+    - /data/apps/{{name}}
+    - 
   - rvm gemset
   - gems
-    - bundler?
-    - unicorn?
+    - unicorn
+  - rvm_wrappers
+    - bootup_unicorn_{{name}}
+  
 
   - nginx config
     - enable config
  
   - unicorn
     - config
+    - socket path
     - service
-    - god 
+    - god

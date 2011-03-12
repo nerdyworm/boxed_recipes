@@ -1,0 +1,39 @@
+require 'aws_sdb'
+
+sdb = AwsSdb::Service.new(
+  :access_key_id      => ENV["AWS_ACCESS_KEY_ID"],
+  :secret_access_key  => ENV["AWS_SECRET_ACCESS_KEY"] )
+
+domain = "<%= @domain %>"
+
+found = false
+sdb.list_domains.first.each do |d|
+  if d == domain
+    found = true
+  end
+end
+
+unless found
+  sdb.create_domain(domain)
+end
+
+action = ARGV.shift
+
+if action == "put"
+  id = ARGV.shift
+  obj = {}
+
+  ARGV.each do |a|
+    key, value = a.split('=')
+    obj[key] = value
+  end
+
+  sdb.put_attributes(domain, id, obj)
+elsif action == "delete"
+  sdb.delete_attributes(domain, ARGV[0])
+elsif action == "select"
+  items, dummy = sdb.query(domain, ARGV[0])
+  items.each do |item|
+    puts "#{item}"
+  end
+end

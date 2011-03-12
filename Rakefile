@@ -1,4 +1,6 @@
 REMOTE_CHEF_PATH = "/etc/chef" # Where to find upstream cookbooks
+dna = ENV['dna']
+log_level = ENV['log_level'] || 'info'
 
 desc "Test your cookbooks and config files for syntax errors"
 task :test do
@@ -7,16 +9,15 @@ task :test do
       raise "Syntax error in #{recipe}" if not ok 
     end
   end
-  
 end
+
 
 desc "Create dna from ruby file"
 task :create_dna  do
-  dna_file = File.join(File.dirname(__FILE__), "config", "dna.rb")
-  raise "There is no confit/dna.rb file! Take care of that!" unless File.exists? dna_file 
+  dna_file = File.join(File.dirname(__FILE__), 'config', dna)
+  raise "There is no confit/#{dna} file!" unless File.exists? dna_file 
   sh "ruby #{dna_file}"
 end
-
 
 desc "Upload the latest copy of your cookbooks to remote server"
 task :upload => [:test, :create_dna]  do
@@ -38,7 +39,7 @@ task :cook => [:upload]  do
   end
   
   puts "* Running chef solo on remote server *"  
-  sh "ssh #{ENV['server']} \"cd #{REMOTE_CHEF_PATH};source /usr/local/lib/rvm && rvmsudo chef-solo -c config/solo.rb -j config/dna.json \""
+  sh "ssh #{ENV['server']} \"cd #{REMOTE_CHEF_PATH};source /usr/local/lib/rvm && rvmsudo chef-solo -c config/solo.rb -j config/dna.json -l #{log_level}\""
 end
 
 desc "Create a new cookbook (with cookbook=name)"

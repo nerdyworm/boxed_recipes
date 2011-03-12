@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# install http://code.google.com/p/amazon-simpledb-cli/
+# and http://developer.amazonwebservices.com/connect/entry.jspa?externalID=1136
+# WARNING: make sure to install the required packages of the second as well
+
+source "/usr/local/rvm/environments/ruby-1.9.2-p180"
+
+export JAVA_HOME='/usr'
+export EC2_KEY_DIR=/root/.ec2
+export EC2_PRIVATE_KEY=${EC2_KEY_DIR}/<%= @pk_name %>
+export EC2_CERT=${EC2_KEY_DIR}/<%= @cert_name %>
+export EC2_HOME='<%= @home %>'
+export EC2_URL="<%= @url %>"
+export EC2_ACCESS_KEY='<%= @key %>'
+export AWS_ACCESS_KEY_ID='<%= @key %>'
+export EC2_SECRET_KEY='<%= @secret %>'
+export AWS_SECRET_ACCESS_KEY='<%= @secret %>'
+export EC2_USER_ID='...'
+
+PATH=$PATH:$HOME/bin:$EC2_HOME/bin:/usr/local/bin
+
+region="us-east-1"
+
+now=$(date +"%Y-%m-%d %H:%M:%S")
+
+snapshots=$(ruby /root/ec2_backups/simpledb.rb select "['expires' < '${now}']")
+
+for snapshot in $snapshots
+do
+    snap=`expr match "$snapshot" '.*\(snap-........\).*'`
+    if [ -n "$snap" ]; then
+        # remove the item from SimpleDB
+        # simpledb delete snapshot $snap
+        ec2-delete-snapshot $snap --region $region
+
+        # delete the snapshot itself
+        ruby /root/ec2_backups/simpledb.rb delete $snap
+    fi
+done

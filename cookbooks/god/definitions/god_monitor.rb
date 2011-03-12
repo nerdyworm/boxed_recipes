@@ -29,14 +29,10 @@ define :god_monitor, :config => "mongrel.god.erb",
     group "root"
     mode 0644
     variables(
-      :name => params[:name],
-      :max_memory => params[:max_memory],
-      :cpu => params[:cpu],
-      :sv_bin => node[:runit][:sv_bin],
-      :params => params,
       :vars => params[:vars]
     )
-    # notifies :restart, resources(:service => "god")
+    
+    notifies :restart, resources(:service => "god")
   end
   
 end

@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# Provides:		       god
+# chkconfig: - 85 15      
+# Required-Start:    $all
+# Required-Stop:     $network $local_fs $syslog
+# Short-Description: God to monitor proccesses
+# 
+
+CONF_DIR=/etc/god/master.god
+PID=/var/run/god.pid
+LOG=/var/log/god.log
+RETVAL=0
+CMD=/usr/local/bin/bootup_god
+
+case "$1" in
+    start)
+      $CMD -P $PID -l $LOG --log-level warn
+      $CMD load $CONF_DIR
+      RETVAL=$?
+  ;;
+    stop)
+      kill `cat $PID`
+      RETVAL=$?
+  ;;
+    restart)
+      kill `cat $PID`
+      $CMD -P $PID -l $LOG --log-level warn
+      $CMD load $CONF_DIR
+      RETVAL=$?
+  ;;
+    status)
+      RETVAL=$?
+  ;;
+    *)
+      echo "Usage: god {start|stop|restart|status}"
+      exit 1
+  ;;
+esac
+
+exit $RETVAL
